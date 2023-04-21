@@ -40,12 +40,12 @@ ajv.addKeyword('isFeeRecipient', {
 
 const addressType = { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$', isAddress: true }
 const proofType = { type: 'string', pattern: '^0x[a-fA-F0-9]{512}$' }
-const encryptedAccountType = { type: 'string', pattern: '^0x[a-fA-F0-9]{392}$' }
+// const encryptedAccountType = { type: 'string', pattern: '^0x[a-fA-F0-9]{392}$' }
 const bytes32Type = { type: 'string', pattern: '^0x[a-fA-F0-9]{64}$' }
 const instanceType = { ...addressType, isKnownContract: true }
 const relayerType = { ...addressType, isFeeRecipient: true }
 
-const tornadoWithdrawSchema = {
+const pgtWithdrawSchema = {
   type: 'object',
   properties: {
     proof: proofType,
@@ -61,116 +61,116 @@ const tornadoWithdrawSchema = {
   required: ['proof', 'contract', 'args'],
 }
 
-const miningRewardSchema = {
-  type: 'object',
-  properties: {
-    proof: proofType,
-    args: {
-      type: 'object',
-      properties: {
-        rate: bytes32Type,
-        fee: bytes32Type,
-        instance: instanceType,
-        rewardNullifier: bytes32Type,
-        extDataHash: bytes32Type,
-        depositRoot: bytes32Type,
-        withdrawalRoot: bytes32Type,
-        extData: {
-          type: 'object',
-          properties: {
-            relayer: relayerType,
-            encryptedAccount: encryptedAccountType,
-          },
-          additionalProperties: false,
-          required: ['relayer', 'encryptedAccount'],
-        },
-        account: {
-          type: 'object',
-          properties: {
-            inputRoot: bytes32Type,
-            inputNullifierHash: bytes32Type,
-            outputRoot: bytes32Type,
-            outputPathIndices: bytes32Type,
-            outputCommitment: bytes32Type,
-          },
-          additionalProperties: false,
-          required: [
-            'inputRoot',
-            'inputNullifierHash',
-            'outputRoot',
-            'outputPathIndices',
-            'outputCommitment',
-          ],
-        },
-      },
-      additionalProperties: false,
-      required: [
-        'rate',
-        'fee',
-        'instance',
-        'rewardNullifier',
-        'extDataHash',
-        'depositRoot',
-        'withdrawalRoot',
-        'extData',
-        'account',
-      ],
-    },
-  },
-  additionalProperties: false,
-  required: ['proof', 'args'],
-}
+// const miningRewardSchema = {
+//   type: 'object',
+//   properties: {
+//     proof: proofType,
+//     args: {
+//       type: 'object',
+//       properties: {
+//         rate: bytes32Type,
+//         fee: bytes32Type,
+//         instance: instanceType,
+//         rewardNullifier: bytes32Type,
+//         extDataHash: bytes32Type,
+//         depositRoot: bytes32Type,
+//         withdrawalRoot: bytes32Type,
+//         extData: {
+//           type: 'object',
+//           properties: {
+//             relayer: relayerType,
+//             encryptedAccount: encryptedAccountType,
+//           },
+//           additionalProperties: false,
+//           required: ['relayer', 'encryptedAccount'],
+//         },
+//         account: {
+//           type: 'object',
+//           properties: {
+//             inputRoot: bytes32Type,
+//             inputNullifierHash: bytes32Type,
+//             outputRoot: bytes32Type,
+//             outputPathIndices: bytes32Type,
+//             outputCommitment: bytes32Type,
+//           },
+//           additionalProperties: false,
+//           required: [
+//             'inputRoot',
+//             'inputNullifierHash',
+//             'outputRoot',
+//             'outputPathIndices',
+//             'outputCommitment',
+//           ],
+//         },
+//       },
+//       additionalProperties: false,
+//       required: [
+//         'rate',
+//         'fee',
+//         'instance',
+//         'rewardNullifier',
+//         'extDataHash',
+//         'depositRoot',
+//         'withdrawalRoot',
+//         'extData',
+//         'account',
+//       ],
+//     },
+//   },
+//   additionalProperties: false,
+//   required: ['proof', 'args'],
+// }
 
-const miningWithdrawSchema = {
-  type: 'object',
-  properties: {
-    proof: proofType,
-    args: {
-      type: 'object',
-      properties: {
-        amount: bytes32Type,
-        extDataHash: bytes32Type,
-        extData: {
-          type: 'object',
-          properties: {
-            fee: bytes32Type,
-            recipient: addressType,
-            relayer: relayerType,
-            encryptedAccount: encryptedAccountType,
-          },
-          additionalProperties: false,
-          required: ['fee', 'relayer', 'encryptedAccount', 'recipient'],
-        },
-        account: {
-          type: 'object',
-          properties: {
-            inputRoot: bytes32Type,
-            inputNullifierHash: bytes32Type,
-            outputRoot: bytes32Type,
-            outputPathIndices: bytes32Type,
-            outputCommitment: bytes32Type,
-          },
-          additionalProperties: false,
-          required: [
-            'inputRoot',
-            'inputNullifierHash',
-            'outputRoot',
-            'outputPathIndices',
-            'outputCommitment',
-          ],
-        },
-      },
-      additionalProperties: false,
-      required: ['amount', 'extDataHash', 'extData', 'account'],
-    },
-  },
-  additionalProperties: false,
-  required: ['proof', 'args'],
-}
+// const miningWithdrawSchema = {
+//   type: 'object',
+//   properties: {
+//     proof: proofType,
+//     args: {
+//       type: 'object',
+//       properties: {
+//         amount: bytes32Type,
+//         extDataHash: bytes32Type,
+//         extData: {
+//           type: 'object',
+//           properties: {
+//             fee: bytes32Type,
+//             recipient: addressType,
+//             relayer: relayerType,
+//             encryptedAccount: encryptedAccountType,
+//           },
+//           additionalProperties: false,
+//           required: ['fee', 'relayer', 'encryptedAccount', 'recipient'],
+//         },
+//         account: {
+//           type: 'object',
+//           properties: {
+//             inputRoot: bytes32Type,
+//             inputNullifierHash: bytes32Type,
+//             outputRoot: bytes32Type,
+//             outputPathIndices: bytes32Type,
+//             outputCommitment: bytes32Type,
+//           },
+//           additionalProperties: false,
+//           required: [
+//             'inputRoot',
+//             'inputNullifierHash',
+//             'outputRoot',
+//             'outputPathIndices',
+//             'outputCommitment',
+//           ],
+//         },
+//       },
+//       additionalProperties: false,
+//       required: ['amount', 'extDataHash', 'extData', 'account'],
+//     },
+//   },
+//   additionalProperties: false,
+//   required: ['proof', 'args'],
+// }
 
-const validateTornadoWithdraw = ajv.compile(tornadoWithdrawSchema)
-const validateMiningReward = ajv.compile(miningRewardSchema)
-const validateMiningWithdraw = ajv.compile(miningWithdrawSchema)
+const validatePgtWithdraw = ajv.compile(pgtWithdrawSchema)
+// const validateMiningReward = ajv.compile(miningRewardSchema)
+// const validateMiningWithdraw = ajv.compile(miningWithdrawSchema)
 
 function getInputError(validator, data) {
   validator(data)
@@ -181,20 +181,20 @@ function getInputError(validator, data) {
   return null
 }
 
-function getTornadoWithdrawInputError(data) {
-  return getInputError(validateTornadoWithdraw, data)
+function getPgtWithdrawInputError(data) {
+  return getInputError(validatePgtWithdraw, data)
 }
 
-function getMiningRewardInputError(data) {
-  return getInputError(validateMiningReward, data)
-}
+// function getMiningRewardInputError(data) {
+//   return getInputError(validateMiningReward, data)
+// }
 
-function getMiningWithdrawInputError(data) {
-  return getInputError(validateMiningWithdraw, data)
-}
+// function getMiningWithdrawInputError(data) {
+//   return getInputError(validateMiningWithdraw, data)
+// }
 
 module.exports = {
-  getTornadoWithdrawInputError,
-  getMiningRewardInputError,
-  getMiningWithdrawInputError,
+  getPgtWithdrawInputError,
+  // getMiningRewardInputError,
+  // getMiningWithdrawInputError,
 }

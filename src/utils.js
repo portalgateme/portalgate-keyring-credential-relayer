@@ -64,7 +64,6 @@ function when(source, event) {
 function getArgsForOracle() {
   const tokens = {
     ...instances.netId1,
-    ...TOKENS,
   }
   const tokenAddresses = []
   const oneUintAmount = []

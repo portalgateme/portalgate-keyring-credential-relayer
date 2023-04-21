@@ -5,8 +5,7 @@ const { Utils, Controller } = require('tornado-anonymity-mining')
 
 const swapABI = require('../abis/swap.abi.json')
 const miningABI = require('../abis/mining.abi.json')
-const tornadoABI = require('../abis/tornadoABI.json')
-const tornadoProxyABI = require('../abis/tornadoProxyABI.json')
+const portalgateProxyABI = require('../abis/pgtRouter.abi.json')
 const { queue } = require('./queue')
 const {
   poseidonHash2,
@@ -16,13 +15,13 @@ const {
   toBN,
   toWei,
   fromWei,
-  toChecksumAddress,
   RelayerError,
   logRelayerError,
 } = require('./utils')
 const { jobType, status } = require('./constants')
 const {
   torn,
+  pgt,
   netId,
   gasLimits,
   privateKey,
@@ -30,8 +29,7 @@ const {
   oracleRpcUrl,
   baseFeeReserve,
   miningServiceFee,
-  tornadoServiceFee,
-  tornadoGoerliProxy,
+  pgtServiceFee,
 } = require('./config')
 const resolver = require('./modules/resolver')
 const { TxManager } = require('tx-manager')
@@ -93,16 +91,16 @@ async function start() {
         BASE_FEE_RESERVE_PERCENTAGE: baseFeeReserve,
       },
     })
-    swap = new web3.eth.Contract(swapABI, await resolver.resolve(torn.rewardSwap.address))
-    minerContract = new web3.eth.Contract(miningABI, await resolver.resolve(torn.miningV2.address))
-    redisSubscribe.subscribe('treeUpdate', fetchTree)
-    await fetchTree()
-    const provingKeys = {
-      treeUpdateCircuit: require('../keys/TreeUpdate.json'),
-      treeUpdateProvingKey: fs.readFileSync('./keys/TreeUpdate_proving_key.bin').buffer,
-    }
-    controller = new Controller({ provingKeys })
-    await controller.init()
+    // swap = new web3.eth.Contract(swapABI, await resolver.resolve(torn.rewardSwap.address))
+    // minerContract = new web3.eth.Contract(miningABI, await resolver.resolve(torn.miningV2.address))
+    // redisSubscribe.subscribe('treeUpdate', fetchTree)
+    // await fetchTree()
+    // const provingKeys = {
+    //   treeUpdateCircuit: require('../keys/TreeUpdate.json'),
+    //   treeUpdateProvingKey: fs.readFileSync('./keys/TreeUpdate_proving_key.bin').buffer,
+    // }
+    // controller = new Controller({ provingKeys })
+    // await controller.init()
     queue.process(processJob)
     console.log('Worker started')
   } catch (e) {
@@ -112,8 +110,8 @@ async function start() {
 }
 
 function checkFee({ data }) {
-  if (data.type === jobType.TORNADO_WITHDRAW) {
-    return checkTornadoFee(data)
+  if (data.type === jobType.PORTALGATE_WITHDRAW) {
+    return checkPgtFee(data)
   }
   return checkMiningFee(data)
 }
@@ -129,16 +127,16 @@ async function getGasPrice() {
   return toBN(toWei(fast.toString(), 'gwei'))
 }
 
-async function checkTornadoFee({ args, contract }) {
+async function checkPgtFee({ args, contract }) {
   const { currency, amount, decimals } = getInstance(contract)
   const [fee, refund] = [args[4], args[5]].map(toBN)
   const gasPrice = await getGasPrice()
 
   const ethPrice = await redis.hget('prices', currency)
-  const expense = gasPrice.mul(toBN(gasLimits[jobType.TORNADO_WITHDRAW]))
+  const expense = gasPrice.mul(toBN(gasLimits[jobType.PORTALGATE_WITHDRAW]))
 
   const feePercent = toBN(fromDecimals(amount, decimals))
-    .mul(toBN(parseInt(tornadoServiceFee * 1e10)))
+    .mul(toBN(parseInt(pgtServiceFee * 1e10)))
     .div(toBN(1e10 * 100))
 
   let desiredFee
@@ -186,9 +184,9 @@ async function checkMiningFee({ args }) {
   const serviceFeePercent = isMiningReward
     ? toBN(0)
     : toBN(args.amount)
-        .sub(providedFee) // args.amount includes fee
-        .mul(toBN(parseInt(miningServiceFee * 1e10)))
-        .div(toBN(1e10 * 100))
+      .sub(providedFee) // args.amount includes fee
+      .mul(toBN(parseInt(miningServiceFee * 1e10)))
+      .div(toBN(1e10 * 100))
   /* eslint-enable */
   const desiredFee = expenseInPoints.add(serviceFeePercent) // in points
   console.log(
@@ -203,35 +201,15 @@ async function checkMiningFee({ args }) {
 }
 
 async function getProxyContract() {
-  let proxyAddress
-  if (netId === 5) {
-    proxyAddress = tornadoGoerliProxy
-  } else {
-    proxyAddress = await resolver.resolve(torn.tornadoRouter.address)
-  }
-  const contract = new web3.eth.Contract(tornadoProxyABI, proxyAddress)
-
-  return {
-    contract,
-    isOldProxy: checkOldProxy(proxyAddress),
-  }
-}
-
-function checkOldProxy(address) {
-  const OLD_PROXY = '0x905b63Fff465B9fFBF41DeA908CEb12478ec7601'
-  return toChecksumAddress(address) === toChecksumAddress(OLD_PROXY)
+  const proxyAddress = await resolver.resolve(pgt.pgtRouter.address)
+  const contract = new web3.eth.Contract(portalgateProxyABI, proxyAddress)
+  return contract
 }
 
 async function getTxObject({ data }) {
-  if (data.type === jobType.TORNADO_WITHDRAW) {
-    let { contract, isOldProxy } = await getProxyContract()
-
-    let calldata = contract.methods.withdraw(data.contract, data.proof, ...data.args).encodeABI()
-
-    if (isOldProxy && getInstance(data.contract).currency !== 'eth') {
-      contract = new web3.eth.Contract(tornadoABI, data.contract)
-      calldata = contract.methods.withdraw(data.proof, ...data.args).encodeABI()
-    }
+  if (data.type === jobType.PORTALGATE_WITHDRAW) {
+    const contract = await getProxyContract()
+    const calldata = contract.methods.withdraw(data.contract, data.proof, ...data.args).encodeABI()
 
     return {
       value: data.args[5],
@@ -284,7 +262,7 @@ async function submitTx(job, retry = 0) {
   await checkFee(job)
   currentTx = await txManager.createTx(await getTxObject(job))
 
-  if (job.data.type !== jobType.TORNADO_WITHDRAW) {
+  if (job.data.type !== jobType.PORTALGATE_WITHDRAW) {
     await fetchTree()
   }
 
@@ -304,7 +282,7 @@ async function submitTx(job, retry = 0) {
     if (receipt.status === 1) {
       await updateStatus(status.CONFIRMED)
     } else {
-      if (job.data.type !== jobType.TORNADO_WITHDRAW && (await isOutdatedTreeRevert(receipt, currentTx))) {
+      if (job.data.type !== jobType.PORTALGATE_WITHDRAW && (await isOutdatedTreeRevert(receipt, currentTx))) {
         if (retry < 3) {
           await updateStatus(status.RESUBMITTED)
           await submitTx(job, retry + 1)
@@ -319,7 +297,7 @@ async function submitTx(job, retry = 0) {
     // todo this could result in duplicated error logs
     // todo handle a case where account tree is still not up to date (wait and retry)?
     if (
-      job.data.type !== jobType.TORNADO_WITHDRAW &&
+      job.data.type !== jobType.PORTALGATE_WITHDRAW &&
       (e.message.indexOf('Outdated account merkle root') !== -1 ||
         e.message.indexOf('Outdated tree update merkle root') !== -1)
     ) {

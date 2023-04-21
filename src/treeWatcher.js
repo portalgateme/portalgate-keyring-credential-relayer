@@ -1,5 +1,5 @@
 const MerkleTree = require('fixed-merkle-tree')
-const { minerMerkleTreeHeight, torn, netId } = require('./config')
+const { minerMerkleTreeHeight, netId } = require('./config')
 const { poseidonHash2, toBN, logRelayerError } = require('./utils')
 const resolver = require('./modules/resolver')
 const web3 = require('./modules/web3')('ws')
@@ -99,7 +99,7 @@ function rebuild() {
 async function init() {
   try {
     console.log('Initializing')
-    const miner = await resolver.resolve(torn.miningV2.address)
+    const miner = await resolver.resolve("mining-v2.contract.tornadocash.eth")
     contract = new web3.eth.Contract(MinerABI, miner)
 
     const cachedEvents = require(`../cache/accounts_farmer_${netId}.json`)

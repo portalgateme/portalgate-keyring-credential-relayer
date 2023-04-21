@@ -237,7 +237,7 @@ services:
       NET_ID: 137
       REDIS_URL: redis://redis/2
     depends_on: [ redis, matic-server ]
- 
+
   matic-healthWatcher:
     image: local/tornadocash/relayer/4.14
     profiles: [ 'matic' ]
@@ -473,7 +473,7 @@ services:
     profiles: [ 'geth' ]
     restart: always
     command: server
-    # env_file: .env.geth
+    env_file: .env.geth
     environment:
       NET_ID: 5
       REDIS_URL: redis://redis/7
@@ -485,7 +485,7 @@ services:
     profiles: [ 'geth' ]
     restart: always
     command: priceWatcher
-    # env_file: .env.geth
+    env_file: .env.geth
     environment:
       NET_ID: 5
       REDIS_URL: redis://redis/7
@@ -496,7 +496,7 @@ services:
     profiles: [ 'geth' ]
     restart: always
     command: healthWatcher
-    # env_file: .env.geth
+    env_file: .env.geth
     environment:
       NET_ID: 5
       REDIS_URL: redis://redis/7
@@ -507,7 +507,7 @@ services:
     profiles: [ 'geth' ]
     restart: always
     command: worker
-    # env_file: .env.geth
+    env_file: .env.geth
     environment:
       NET_ID: 5
       REDIS_URL: redis://redis/7
@@ -521,3 +521,4 @@ volumes:
   html:
   certs:
   redis:
+

@@ -1,5 +1,5 @@
 const queue = require('../queue')
-const { netId, tornadoServiceFee, miningServiceFee, instances, rewardAccount } = require('../config')
+const { netId, pgtServiceFee, miningServiceFee, instances, rewardAccount } = require('../config')
 const { version } = require('../../package.json')
 const { redis } = require('../modules/redis')
 const { readRelayerErrors } = require('../utils')
@@ -15,7 +15,7 @@ async function status(req, res) {
     instances: instances[`netId${netId}`],
     netId,
     ethPrices,
-    tornadoServiceFee,
+    pgtServiceFee,
     miningServiceFee,
     version,
     health,
@@ -25,7 +25,7 @@ async function status(req, res) {
 
 function index(req, res) {
   res.send(
-    'This is <a href=https://tornado.cash>tornado.cash</a> Relayer service. Check the <a href=/v1/status>/status</a> for settings',
+    'This is <a href=https://portalgate.me>Portal Gate</a> Relayer service. Check the <a href=/v1/status>/status</a> for settings',
   )
 }
 

@@ -1,43 +1,43 @@
 require('chai').should()
 
 const {
-  getTornadoWithdrawInputError,
+  getPgtWithdrawInputError,
   getMiningRewardInputError,
   getMiningWithdrawInputError,
 } = require('../src/modules/validator')
 
 describe('Validator', () => {
-  describe('#getTornadoWithdrawInputError', () => {
+  describe('#getPgtWithdrawInputError', () => {
     it('should work', () => {
-      getTornadoWithdrawInputError(withdrawData)
+      getPgtWithdrawInputError(withdrawData)
     })
 
     it('should throw for incorrect proof', () => {
       const malformedData = { ...withdrawData }
       malformedData.proof = '0xbeef'
-      getTornadoWithdrawInputError(malformedData).should.be.equal(
+      getPgtWithdrawInputError(malformedData).should.be.equal(
         '.proof should match pattern "^0x[a-fA-F0-9]{512}$"',
       )
     })
     it('should throw if unknown contract', () => {
       const malformedData = { ...withdrawData }
       malformedData.contract = '0xf17f52151ebef6c7334fad080c5704d77216b732'
-      getTornadoWithdrawInputError(malformedData).should.be.equal(
+      getPgtWithdrawInputError(malformedData).should.be.equal(
         '.contract should pass "isKnownContract" keyword validation',
       )
     })
     it('should throw something is missing', () => {
       const malformedData = { ...withdrawData }
       delete malformedData.proof
-      getTornadoWithdrawInputError(malformedData).should.be.equal(" should have required property 'proof'")
+      getPgtWithdrawInputError(malformedData).should.be.equal(" should have required property 'proof'")
       malformedData.proof = withdrawData.proof
 
       delete malformedData.args
-      getTornadoWithdrawInputError(malformedData).should.be.equal(" should have required property 'args'")
+      getPgtWithdrawInputError(malformedData).should.be.equal(" should have required property 'args'")
       malformedData.args = withdrawData.args
 
       delete malformedData.contract
-      getTornadoWithdrawInputError(malformedData).should.be.equal(" should have required property 'contract'")
+      getPgtWithdrawInputError(malformedData).should.be.equal(" should have required property 'contract'")
       malformedData.contract = withdrawData.contract
     })
   })

@@ -1,7 +1,7 @@
 {
   "name": "relay",
   "version": "4.1.4",
-  "description": "Relayer for Tornado.cash privacy solution. https://tornado.cash",
+  "description": "Relayer for portal gate privacy solution. https://portalgate.me",
   "scripts": {
     "server": "node src/server.js",
     "worker": "node src/worker",
@@ -13,7 +13,7 @@
     "prettier:fix": "npx prettier --write . --config .prettierrc",
     "lint": "yarn eslint && yarn prettier:check",
     "test": "mocha",
-    "start": "yarn server & yarn priceWatcher & yarn treeWatcher & yarn worker & yarn healthWatcher"
+    "start": "yarn server & yarn priceWatcher & yarn worker & yarn healthWatcher"
   },
   "author": "tornado.cash",
   "license": "MIT",
