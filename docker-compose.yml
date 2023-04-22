@@ -48,7 +48,7 @@ services:
 
   eth-server:
     build: .
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'eth' ]
     restart: always
     command: server
@@ -60,7 +60,7 @@ services:
     depends_on: [ redis ]
 
   # eth-treeWatcher:
-  #   image: local/tornadocash/relayer/4.14
+  #   image: local/portalgate/relayer/4.14
   #   profiles: [ 'eth' ]
   #   restart: always
   #   command: treeWatcher
@@ -71,7 +71,7 @@ services:
   #   depends_on: [ redis, eth-server ]
 
   eth-priceWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'eth' ]
     restart: always
     command: priceWatcher
@@ -82,7 +82,7 @@ services:
     depends_on: [ redis, eth-server ]
 
   eth-healthWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'eth' ]
     restart: always
     command: healthWatcher
@@ -93,7 +93,7 @@ services:
     depends_on: [ redis, eth-server ]
 
   eth-worker1:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'eth' ]
     restart: always
     command: worker
@@ -104,7 +104,7 @@ services:
     depends_on: [ redis, eth-server ]
 
   #  worker2:
-  #    image: tornadocash/relayer:mining
+  #    image: portalgate/relayer:mining
   #    restart: always
   #    command: worker
   #    env_file: .env
@@ -166,7 +166,7 @@ services:
 
   bnb-server:
     build: .
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'bnb' ]
     restart: always
     command: server
@@ -178,7 +178,7 @@ services:
     depends_on: [ redis ]
 
   bnb-priceWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'bnb' ]
     restart: always
     command: priceWatcher
@@ -189,7 +189,7 @@ services:
     depends_on: [ redis, bnb-server ]
 
   bnb-healthWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'bnb' ]
     restart: always
     command: healthWatcher
@@ -200,7 +200,7 @@ services:
     depends_on: [ redis, bnb-server ]
 
   bnb-worker1:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'bnb' ]
     restart: always
     command: worker
@@ -216,7 +216,7 @@ services:
 
   matic-server:
     build: .
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'matic' ]
     restart: always
     command: server
@@ -228,7 +228,7 @@ services:
     depends_on: [ redis ]
 
   matic-priceWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'matic' ]
     restart: always
     command: priceWatcher
@@ -239,7 +239,7 @@ services:
     depends_on: [ redis, matic-server ]
 
   matic-healthWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'matic' ]
     restart: always
     command: healthWatcher
@@ -250,7 +250,7 @@ services:
     depends_on: [ redis, matic-server ]
 
   matic-worker1:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'matic' ]
     restart: always
     command: worker
@@ -266,7 +266,7 @@ services:
 
   xdai-server:
     build: .
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'xdai' ]
     restart: always
     command: server
@@ -278,7 +278,7 @@ services:
     depends_on: [ redis ]
 
   xdai-priceWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'xdai' ]
     restart: always
     command: priceWatcher
@@ -289,7 +289,7 @@ services:
     depends_on: [ redis, xdai-server ]
 
   xdai-healthWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'xdai' ]
     restart: always
     command: healthWatcher
@@ -300,7 +300,7 @@ services:
     depends_on: [ redis, xdai-server ]
 
   xdai-worker1:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'xdai' ]
     restart: always
     command: worker
@@ -316,7 +316,7 @@ services:
 
   avax-server:
     build: .
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'avax' ]
     restart: always
     command: server
@@ -328,7 +328,7 @@ services:
     depends_on: [ redis ]
 
   avax-priceWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'avax' ]
     restart: always
     command: priceWatcher
@@ -339,7 +339,7 @@ services:
     depends_on: [ redis, avax-server ]
 
   avax-healthWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'avax' ]
     restart: always
     command: healthWatcher
@@ -350,7 +350,7 @@ services:
     depends_on: [ redis, avax-server ]
 
   avax-worker1:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'avax' ]
     restart: always
     command: worker
@@ -366,7 +366,7 @@ services:
 
   op-server:
     build: .
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'op' ]
     restart: always
     command: server
@@ -378,9 +378,9 @@ services:
     depends_on: [ redis ]
 
   op-priceWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'op' ]
-    image: tornadocash/relayer:mining
+    image: portalgate/relayer:mining
     restart: always
     command: priceWatcher
     # env_file: .env.op
@@ -390,9 +390,9 @@ services:
     depends_on: [ redis, op-server ]
 
   op-healthWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'op' ]
-    image: tornadocash/relayer:mining
+    image: portalgate/relayer:mining
     restart: always
     command: healthWatcher
     # env_file: .env.op
@@ -402,9 +402,9 @@ services:
     depends_on: [ redis, op-server ]
 
   op-worker1:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'op' ]
-    image: tornadocash/relayer:mining
+    image: portalgate/relayer:mining
     restart: always
     command: worker
     # env_file: .env.op
@@ -419,7 +419,7 @@ services:
 
   arb-server:
     build: .
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'arb' ]
     restart: always
     command: server
@@ -431,7 +431,7 @@ services:
     depends_on: [ redis ]
 
   arb-priceWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'arb' ]
     restart: always
     command: priceWatcher
@@ -442,7 +442,7 @@ services:
     depends_on: [ redis, arb-server ]
 
   arb-healthWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'arb' ]
     restart: always
     command: healthWatcher
@@ -453,7 +453,7 @@ services:
     depends_on: [ redis, arb-server ]
 
   arb-worker1:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'arb' ]
     restart: always
     command: worker
@@ -469,7 +469,7 @@ services:
 
   geth-server:
     build: .
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'geth' ]
     restart: always
     command: server
@@ -481,7 +481,7 @@ services:
     depends_on: [ redis ]
 
   geth-priceWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'geth' ]
     restart: always
     command: priceWatcher
@@ -492,7 +492,7 @@ services:
     depends_on: [ redis, geth-server ]
 
   geth-healthWatcher:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'geth' ]
     restart: always
     command: healthWatcher
@@ -503,7 +503,7 @@ services:
     depends_on: [ redis, geth-server ]
 
   geth-worker1:
-    image: local/tornadocash/relayer/4.14
+    image: local/portalgate/relayer/4.14
     profiles: [ 'geth' ]
     restart: always
     command: worker

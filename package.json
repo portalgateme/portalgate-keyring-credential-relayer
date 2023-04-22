@@ -15,7 +15,7 @@
     "test": "mocha",
     "start": "yarn server & yarn priceWatcher & yarn worker & yarn healthWatcher"
   },
-  "author": "tornado.cash",
+  "author": "portalgate.me",
   "license": "MIT",
   "dependencies": {
     "ajv": "^6.12.5",
