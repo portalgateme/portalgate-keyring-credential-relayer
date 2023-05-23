@@ -5,7 +5,7 @@ const { Utils, Controller } = require('tornado-anonymity-mining')
 
 const swapABI = require('../abis/swap.abi.json')
 const miningABI = require('../abis/mining.abi.json')
-const portalgateProxyABI = require('../abis/pgtRouter.abi.json')
+const portalgateProxyABI = require('../abis/pgtSimpleRouter.abi.json')
 const { queue } = require('./queue')
 const {
   poseidonHash2,
@@ -201,7 +201,7 @@ async function checkMiningFee({ args }) {
 }
 
 async function getProxyContract() {
-  const proxyAddress = await resolver.resolve(pgt.pgtRouter.address)
+  const proxyAddress = "0xE4F8b89a5B25ab2567b823Ff3C405149498f667f"
   const contract = new web3.eth.Contract(portalgateProxyABI, proxyAddress)
   return contract
 }
