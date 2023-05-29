@@ -7,14 +7,14 @@
         "type": "address"
       },
       {
-        "internalType": "bytes32",
+        "internalType": "address",
         "name": "_instanceRegistry",
-        "type": "bytes32"
+        "type": "address"
       },
       {
-        "internalType": "bytes32",
+        "internalType": "address",
         "name": "_relayerRegistry",
-        "type": "bytes32"
+        "type": "address"
       }
     ],
     "stateMutability": "nonpayable",
@@ -73,25 +73,6 @@
     "name": "backupNotes",
     "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32[]",
-        "name": "domains",
-        "type": "bytes32[]"
-      }
-    ],
-    "name": "bulkResolve",
-    "outputs": [
-      {
-        "internalType": "address[]",
-        "name": "result",
-        "type": "address[]"
-      }
-    ],
-    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -175,51 +156,6 @@
       }
     ],
     "name": "rescueTokens",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes32",
-        "name": "node",
-        "type": "bytes32"
-      }
-    ],
-    "name": "resolve",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_instanceRegistry",
-        "type": "address"
-      }
-    ],
-    "name": "updateInstanceRegistry",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "_relayerRegitry",
-        "type": "address"
-      }
-    ],
-    "name": "updateRelayerRegistry",
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"

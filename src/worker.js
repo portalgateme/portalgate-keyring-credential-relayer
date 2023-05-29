@@ -201,7 +201,7 @@ async function checkMiningFee({ args }) {
 }
 
 async function getProxyContract() {
-  const proxyAddress = "0xE4F8b89a5B25ab2567b823Ff3C405149498f667f"
+  const proxyAddress = "0xED18F81c1cD32ed451b1Ad91f0558FCd018d5B96"
   const contract = new web3.eth.Contract(portalgateProxyABI, proxyAddress)
   return contract
 }
