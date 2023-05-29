@@ -76,9 +76,9 @@ module.exports = {
       eth: {
         instanceAddress: {
           '0.1': '0x1f5c4316aED284F8348a2663BAef4EE35b308E51',
-          '1': '',
-          '10': '',
-          '100': '',
+          '1': '0x',
+          '10': '0x',
+          '100': '0x',
         },
         tokenAddress: "0x5DEFB82285503d613D5Bf191B28B6d59EA67142f",
         symbol: 'kycETH',
@@ -86,10 +86,10 @@ module.exports = {
       },
       dai: {
         instanceAddress: {
-          '100': '',
-          '1000': '',
-          '10000': '',
-          '100000': '',
+          '100': '0x',
+          '1000': '0x',
+          '10000': '0x',
+          '100000': '0x',
         },
         tokenAddress: "0x573396bE685b6eAa45dAE6cAaC8F041fE4C1ab68",
         symbol: 'kycDAI',
@@ -97,10 +97,10 @@ module.exports = {
       },
       usdc: {
         instanceAddress: {
-          '100': '',
-          '1000': '',
-          '10000': '',
-          '100000': '',
+          '100': '0x',
+          '1000': '0x',
+          '10000': '0x',
+          '100000': '0x',
         },
         tokenAddress: "0xaF21bf4CaD882a01ee94399932d359EDA4f2b960",
         decimals: 6,
@@ -109,9 +109,9 @@ module.exports = {
       usdt: {
         instanceAddress: {
           '100': '0x33e5D8D1167AAf513c483da5B1A61dD81b2b9f2c',
-          '1000': '',
-          '10000': '',
-          '100000': '',
+          '1000': '0x',
+          '10000': '0x',
+          '100000': '0x',
         },
         symbol: 'kycUSDT',
         tokenAddress: '0x5fD43956c4c75459C12282F30465C70D29338613',
