@@ -100,7 +100,7 @@ module.exports = {
           '100': '0x',
           '1000': '0x',
           '10000': '0x',
-          '100000': '0x',
+          '100000': '0x34317E92C6AFFF78865aC68CAE7BE415c55fA09b',
         },
         tokenAddress: "0xaF21bf4CaD882a01ee94399932d359EDA4f2b960",
         decimals: 6,
