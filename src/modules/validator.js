@@ -1,6 +1,5 @@
-const { isAddress, toChecksumAddress } = require('web3-utils')
-const { getInstance } = require('../utils')
-const { rewardAccount } = require('../config')
+const { isAddress } = require('web3-utils')
+const { isTradingWalletWhitelisted } = require('../utils')
 
 const Ajv = require('ajv')
 const ajv = new Ajv({ format: 'fast' })
@@ -16,21 +15,10 @@ ajv.addKeyword('isAddress', {
   errors: true,
 })
 
-ajv.addKeyword('isKnownContract', {
+ajv.addKeyword('isTradingWalletWhitelisted', {
   validate: (schema, data) => {
     try {
-      return !!getInstance(data)
-    } catch (e) {
-      return false
-    }
-  },
-  errors: true,
-})
-
-ajv.addKeyword('isFeeRecipient', {
-  validate: (schema, data) => {
-    try {
-      return toChecksumAddress(rewardAccount) === toChecksumAddress(data)
+      return isTradingWalletWhitelisted(data)
     } catch (e) {
       return false
     }
@@ -39,136 +27,26 @@ ajv.addKeyword('isFeeRecipient', {
 })
 
 const addressType = { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$', isAddress: true }
-const proofType = { type: 'string', pattern: '^0x[a-fA-F0-9]{512}$' }
-// const encryptedAccountType = { type: 'string', pattern: '^0x[a-fA-F0-9]{392}$' }
-const bytes32Type = { type: 'string', pattern: '^0x[a-fA-F0-9]{64}$' }
-const instanceType = { ...addressType, isKnownContract: true }
-const relayerType = { ...addressType, isFeeRecipient: true }
+const whitelistAddressType = { ...addressType, isTradingWalletWhitelisted: true }
+const signatureType = { type: 'string', pattern: '^0x[a-fA-F0-9]{100,200}$' }
+const dataType = { type: 'string', pattern: '^0x[a-fA-F0-9]{2000,2100}$' }
+const numberType = { type: "number" }
 
-const pgtWithdrawSchema = {
+const zkCredentialUpdateSchema = {
   type: 'object',
   properties: {
-    proof: proofType,
-    contract: instanceType,
-    args: {
+    req: {
       type: 'array',
       maxItems: 6,
       minItems: 6,
-      items: [bytes32Type, bytes32Type, addressType, relayerType, bytes32Type, bytes32Type],
+      items: [whitelistAddressType, addressType, numberType, numberType, numberType, dataType],
     },
+    signature: signatureType,
   },
-  additionalProperties: false,
-  required: ['proof', 'contract', 'args'],
+  required: ['req', 'signature'],
 }
 
-// const miningRewardSchema = {
-//   type: 'object',
-//   properties: {
-//     proof: proofType,
-//     args: {
-//       type: 'object',
-//       properties: {
-//         rate: bytes32Type,
-//         fee: bytes32Type,
-//         instance: instanceType,
-//         rewardNullifier: bytes32Type,
-//         extDataHash: bytes32Type,
-//         depositRoot: bytes32Type,
-//         withdrawalRoot: bytes32Type,
-//         extData: {
-//           type: 'object',
-//           properties: {
-//             relayer: relayerType,
-//             encryptedAccount: encryptedAccountType,
-//           },
-//           additionalProperties: false,
-//           required: ['relayer', 'encryptedAccount'],
-//         },
-//         account: {
-//           type: 'object',
-//           properties: {
-//             inputRoot: bytes32Type,
-//             inputNullifierHash: bytes32Type,
-//             outputRoot: bytes32Type,
-//             outputPathIndices: bytes32Type,
-//             outputCommitment: bytes32Type,
-//           },
-//           additionalProperties: false,
-//           required: [
-//             'inputRoot',
-//             'inputNullifierHash',
-//             'outputRoot',
-//             'outputPathIndices',
-//             'outputCommitment',
-//           ],
-//         },
-//       },
-//       additionalProperties: false,
-//       required: [
-//         'rate',
-//         'fee',
-//         'instance',
-//         'rewardNullifier',
-//         'extDataHash',
-//         'depositRoot',
-//         'withdrawalRoot',
-//         'extData',
-//         'account',
-//       ],
-//     },
-//   },
-//   additionalProperties: false,
-//   required: ['proof', 'args'],
-// }
-
-// const miningWithdrawSchema = {
-//   type: 'object',
-//   properties: {
-//     proof: proofType,
-//     args: {
-//       type: 'object',
-//       properties: {
-//         amount: bytes32Type,
-//         extDataHash: bytes32Type,
-//         extData: {
-//           type: 'object',
-//           properties: {
-//             fee: bytes32Type,
-//             recipient: addressType,
-//             relayer: relayerType,
-//             encryptedAccount: encryptedAccountType,
-//           },
-//           additionalProperties: false,
-//           required: ['fee', 'relayer', 'encryptedAccount', 'recipient'],
-//         },
-//         account: {
-//           type: 'object',
-//           properties: {
-//             inputRoot: bytes32Type,
-//             inputNullifierHash: bytes32Type,
-//             outputRoot: bytes32Type,
-//             outputPathIndices: bytes32Type,
-//             outputCommitment: bytes32Type,
-//           },
-//           additionalProperties: false,
-//           required: [
-//             'inputRoot',
-//             'inputNullifierHash',
-//             'outputRoot',
-//             'outputPathIndices',
-//             'outputCommitment',
-//           ],
-//         },
-//       },
-//       additionalProperties: false,
-//       required: ['amount', 'extDataHash', 'extData', 'account'],
-//     },
-//   },
-//   additionalProperties: false,
-//   required: ['proof', 'args'],
-// }
-
-const validatePgtWithdraw = ajv.compile(pgtWithdrawSchema)
+const validateZkCredentialUpdate = ajv.compile(zkCredentialUpdateSchema)
 // const validateMiningReward = ajv.compile(miningRewardSchema)
 // const validateMiningWithdraw = ajv.compile(miningWithdrawSchema)
 
@@ -181,20 +59,10 @@ function getInputError(validator, data) {
   return null
 }
 
-function getPgtWithdrawInputError(data) {
-  return getInputError(validatePgtWithdraw, data)
+function getZkCredentialUpdateError(data) {
+  return getInputError(validateZkCredentialUpdate, data)
 }
 
-// function getMiningRewardInputError(data) {
-//   return getInputError(validateMiningReward, data)
-// }
-
-// function getMiningWithdrawInputError(data) {
-//   return getInputError(validateMiningWithdraw, data)
-// }
-
 module.exports = {
-  getPgtWithdrawInputError,
-  // getMiningRewardInputError,
-  // getMiningWithdrawInputError,
+  getZkCredentialUpdateError
 }

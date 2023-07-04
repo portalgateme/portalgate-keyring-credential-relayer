@@ -1,53 +1,22 @@
 const {
-  getPgtWithdrawInputError,
+  getZkCredentialUpdateError,
 } = require('../modules/validator')
 const { postJob } = require('../queue')
 const { jobType } = require('../constants')
 
-async function pgtWithdraw(req, res) {
-  const inputError = getPgtWithdrawInputError(req.body)
+async function updateZkCredential(req, res) {
+  const inputError = getZkCredentialUpdateError(req.body)
   if (inputError) {
     console.log('Invalid input:', inputError)
     return res.status(400).json({ error: inputError })
   }
-
   const id = await postJob({
-    type: jobType.PORTALGATE_WITHDRAW,
+    type: jobType.ZK_CREDENTIAL_UPDATE,
     request: req.body,
   })
   return res.json({ id })
 }
 
-// async function miningReward(req, res) {
-//   const inputError = getMiningRewardInputError(req.body)
-//   if (inputError) {
-//     console.log('Invalid input:', inputError)
-//     return res.status(400).json({ error: inputError })
-//   }
-
-//   const id = await postJob({
-//     type: jobType.MINING_REWARD,
-//     request: req.body,
-//   })
-//   return res.json({ id })
-// }
-
-// async function miningWithdraw(req, res) {
-//   const inputError = getMiningWithdrawInputError(req.body)
-//   if (inputError) {
-//     console.log('Invalid input:', inputError)
-//     return res.status(400).json({ error: inputError })
-//   }
-
-//   const id = await postJob({
-//     type: jobType.MINING_WITHDRAW,
-//     request: req.body,
-//   })
-//   return res.json({ id })
-// }
-
 module.exports = {
-  pgtWithdraw,
-  // miningReward,
-  // miningWithdraw,
+  updateZkCredential,
 }

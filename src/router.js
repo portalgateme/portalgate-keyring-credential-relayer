@@ -19,11 +19,8 @@ router.use((err, req, res, next) => {
 })
 
 router.get('/', status.index)
-router.get('/v1/status', status.status)
-router.get('/v1/jobs/:id', status.getJob)
-router.post('/v1/pgtWithdraw', controller.pgtWithdraw)
 router.get('/status', status.status)
-// router.post('/v1/miningReward', controller.miningReward)
-// router.post('/v1/miningWithdraw', controller.miningWithdraw)
+router.get('/jobs/:id', status.getJob)
+router.post('/updateZkCredential', controller.updateZkCredential)
 
 module.exports = router

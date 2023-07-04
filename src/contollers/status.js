@@ -1,31 +1,25 @@
 const queue = require('../queue')
-const { netId, pgtServiceFee, miningServiceFee, instances, rewardAccount } = require('../config')
+const { netId } = require('../config')
 const { version } = require('../../package.json')
 const { redis } = require('../modules/redis')
 const { readRelayerErrors } = require('../utils')
 
 async function status(req, res) {
-  const ethPrices = await redis.hgetall('prices')
   const health = await redis.hgetall('health')
   health.errorsLog = await readRelayerErrors(redis)
   const { waiting: currentQueue } = await queue.queue.getJobCounts()
 
   res.json({
-    rewardAccount,
-    instances: instances[`netId${netId}`],
     netId,
-    ethPrices,
-    pgtServiceFee,
-    miningServiceFee,
     version,
     health,
-    currentQueue,
+    currentQueue
   })
 }
 
 function index(req, res) {
   res.send(
-    'This is <a href=https://portalgate.me>Portal Gate</a> Relayer service. Check the <a href=/v1/status>/status</a> for settings',
+    'This is <a href=https://portalgate.me>Portal Gate</a> Relayer service. Check the <a href=/status>/status</a> for settings',
   )
 }
 
@@ -37,5 +31,5 @@ async function getJob(req, res) {
 module.exports = {
   status,
   index,
-  getJob,
+  getJob
 }

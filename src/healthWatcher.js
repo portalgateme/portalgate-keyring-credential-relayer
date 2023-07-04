@@ -1,13 +1,16 @@
 const { setSafeInterval, toBN, fromWei, RelayerError } = require('./utils')
 const { privateKey, minimumBalance } = require('./config')
 const { redis } = require('./modules/redis')
-const web3 = require('./modules/web3')()
+const { ethers } = require('ethers')
+const getProvider = require('./modules/provider')
+
+const provider = getProvider()
 
 async function main() {
   try {
-    const { address } = web3.eth.accounts.privateKeyToAccount(privateKey)
-    const balance = await web3.eth.getBalance(address)
-    if (toBN(balance).lt(toBN(minimumBalance))) {
+    const account = new ethers.Wallet(privateKey, provider);
+    const balance = await account.getBalance()
+    if (toBN(balance.toString()).lt(toBN(minimumBalance))) {
       throw new RelayerError(`Not enough balance, less than ${fromWei(minimumBalance)} ETH`, 1)
     }
 

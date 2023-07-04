@@ -1,4 +1,4 @@
-# Relayer for Tornado Cash [![Build Status](https://github.com/tornadocash/relayer/workflows/build/badge.svg)](https://github.com/tornadocash/relayer/actions) [![Docker Image Version (latest semver)](https://img.shields.io/docker/v/tornadocash/relayer?logo=docker&logoColor=%23FFFFFF&sort=semver)](https://hub.docker.com/repository/docker/tornadocash/relayer)
+# Relayer for Zk Credential Update [![Build Status](https://github.com/tornadocash/relayer/workflows/build/badge.svg)](https://github.com/tornadocash/relayer/actions) [![Docker Image Version (latest semver)](https://img.shields.io/docker/v/tornadocash/relayer?logo=docker&logoColor=%23FFFFFF&sort=semver)](https://hub.docker.com/repository/docker/tornadocash/relayer)
 
 __*Tornado Cash was sanctioned by the US Treasury on 08/08/2022, this makes it illegal for US citizens to interact with Tornado Cash and all of it's associated deloyed smart contracts. Please understand the laws where you live and take all necessary steps to protect and anonomize yourself.__
 
@@ -9,38 +9,38 @@ __*It is recommended to run your Relayer on a VPS instnace ([Virtual Private Ser
 *The following instructions are for Ubuntu 22.10, other operating systems may vary. These instructions include automated SSL configuration with LetsEncrypt.*
 
 __PREREQUISITES__
-1. Update core dependencies 
-  - `sudo apt-get update` 
+1. Update core dependencies
+  - `sudo apt-get update`
 2. Install docker-compose
   - `curl -SL https://github.com/docker/compose/releases/download/v2.16.0/docker-compose-linux-x86_64 -o /usr/local/bin/docker-compose && sudo chmod +x /usr/local/bin/docker-compose`
 3. Install Docker
-  - `curl -fsSL https://get.docker.com -o get-docker.sh && chmod +x get-docker.sh && ./get-docker.sh` 
+  - `curl -fsSL https://get.docker.com -o get-docker.sh && chmod +x get-docker.sh && ./get-docker.sh`
 4. Install git
-  - `sudo apt-get install git-all` 
+  - `sudo apt-get install git-all`
 5. Install nginx
-  - `sudo apt install nginx` 
+  - `sudo apt install nginx`
 6. Stop apache2 instance (enabled by default)
   - `sudo systemctl stop apache2`
 
-__FIREWALL CONFIGURATION__ 
+__FIREWALL CONFIGURATION__
 
-_* Warning: Failure to configure SSH as the first UFW rule, will lock you out of the instance_ 
+_* Warning: Failure to configure SSH as the first UFW rule, will lock you out of the instance_
 
-1. Make sure UFW is installed by running `apt update` and `apt install ufw` 
+1. Make sure UFW is installed by running `apt update` and `apt install ufw`
 2. Allow SSH in the first position in UFW by running `ufw insert 1 allow ssh`*
 3. Allow HTTP, and HTTPS by running `ufw allow https/tcp/http`
 4. Finalise changes and enable firewall `ufw enable`
 
-__NETWORK DEPLOYMENT OPTIONS__ 
+__NETWORK DEPLOYMENT OPTIONS__
 
 _Ethereum (eth), Binance (bnb), Gnosis (xdai), Polygon (matic), Optimisim (op), Arbitrum (arb) and Goerli (geth)_
 
 __SINGLE NETWORK DEPLOYMENT__
-1. Clone the repository and enter the directory 
+1. Clone the repository and enter the directory
   - `git clone https://development.tornadocash.community/tornadocash/classic-relayer && cd classic-relayer`
-2. Clone the example enviroment file `.env.example` to configure for the perferred network 
+2. Clone the example enviroment file `.env.example` to configure for the perferred network
   - By default each network is preconfigured the naming of `.env.<NETWORK SYMBOL>`
-  - `cp .env.example .env.eth` 
+  - `cp .env.example .env.eth`
   - Set `PRIVATE_KEY` for your relayer address (remove the 0x from your private key)
   - Set `VIRTUAL_HOST` and `LETSENCRYPT_HOST` to your domain address
     - add a A  record DNS record with the value assigned to your instance IP address to configure the domain
@@ -53,13 +53,13 @@ __SINGLE NETWORK DEPLOYMENT__
 5. Visit your domain address and check the `/status` endpoint and ensure there is no errors in the `status` field
 
 __NGINX REVERSE PROXY__
-1. Copy the pre-modified nginx policy as your default policy 
-  - `cp tornado.conf /etc/nginx/sites-available/default` 
+1. Copy the pre-modified nginx policy as your default policy
+  - `cp tornado.conf /etc/nginx/sites-available/default`
 2. Append the default nginx configuraiton to include streams
   - `echo "stream {  map_hash_bucket_size 128;  map_hash_max_size 128;  include /etc/nginx/conf.d/streams/*.conf; }" >> /etc/nginx/nginx.conf`
 3. Create the stream configruation
   - `mkdir /etc/nginx/conf.d/streams && cp tornado-stream.conf /etc/nginx/conf.d/streams/tornado-stream.conf`
-4. Start nginx to make sure the configuration is correct 
+4. Start nginx to make sure the configuration is correct
   - `sudo systemctl restart nginx`
 5. Stop nginx
   - `sudo systemctl stop nginx`
@@ -68,7 +68,7 @@ __MULTIPLE NETWORK DEPLOYMENT__
 1. Setup the instructions stated to setup an nginx reverse proxy
 2. Clone the example enviroment file `.env.example` for the networks of choice and configure
   - By default each network is preconfigured the naming of `.env.<NETWORK SYMBOL>`
-  - `cp .env.example .env.eth` 
+  - `cp .env.example .env.eth`
   - `cp .env.example .env.bnb`
   - `cp .env.example .env.arb`
   - `cp .env.example .env.op`
@@ -78,7 +78,7 @@ __MULTIPLE NETWORK DEPLOYMENT__
   - Set `VIRTUAL_HOST` and `LETSENCRYPT_HOST` a unique subndomain for every network to each environment file
     - eg: `mainnet.example.com` for Ethereum, `binance.example.com` for Binance etc
     - ensure that the parent domain domain is specified first with the subdomain after sperated by a comma for SAN certificates
-      - eg: `VIRTUAL_HOST=example.com,eth.example.com` and `LETSENCRYPT_HOST=example.com,eth.example.com` 
+      - eg: `VIRTUAL_HOST=example.com,eth.example.com` and `LETSENCRYPT_HOST=example.com,eth.example.com`
     - add a A wildcard record DNS record with the value assigned to your instance IP address to configure submdomains
   - Set `RELAYER_FEE` to what you would like to charge as your fee (remember 0.3% is deducted from your staked relayer balance)
   - Set `RPC_URL` to a non-censoring RPC (You can [run your own](https://github.com/feshchenkod/rpc-nodes), or use a [free option](https://chainnodes.org/))
