@@ -1,5 +1,5 @@
 const queue = require('../queue')
-const { netId } = require('../config')
+const { netId, trustedForwarderAddress, networkName } = require('../config')
 const { version } = require('../../package.json')
 const { redis } = require('../modules/redis')
 const { readRelayerErrors } = require('../utils')
@@ -11,8 +11,10 @@ async function status(req, res) {
 
   res.json({
     netId,
+    networkName,
     version,
     health,
+    trustedForwarderAddress,
     currentQueue
   })
 }
