@@ -4,6 +4,11 @@ const { jobType } = require('./constants')
 const { whitelistAddresses } = require('./config/whitelistAddress')
 const netId = Number(process.env.NET_ID) || 1
 
+const updateCredentialAddress = {
+  netId1: "",
+  netId5: "0x1F49bD7072a0C64D3D2906808d1dd3945F26ED7e",
+}
+
 module.exports = {
   netId,
   redisUrl: process.env.REDIS_URL || 'redis://127.0.0.1:6379',
@@ -18,5 +23,6 @@ module.exports = {
   },
   minimumBalance: '500000000000000000',
   baseFeeReserve: Number(process.env.BASE_FEE_RESERVE_PERCENTAGE),
-  whitelistAddresses: whitelistAddresses[`netId${netId}`]
+  whitelistAddresses: whitelistAddresses[`netId${netId}`],
+  updateCredentialAddress: updateCredentialAddress[`netId${netId}`]
 }

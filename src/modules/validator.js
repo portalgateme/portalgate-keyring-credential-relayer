@@ -1,5 +1,5 @@
 const { isAddress } = require('web3-utils')
-const { isTradingWalletWhitelisted } = require('../utils')
+const { isTradingWalletWhitelisted, isKnownUpdateCredential } = require('../utils')
 
 const Ajv = require('ajv')
 const ajv = new Ajv({ format: 'fast' })
@@ -26,8 +26,20 @@ ajv.addKeyword('isTradingWalletWhitelisted', {
   errors: true,
 })
 
+ajv.addKeyword('isKnownUpdateCredential', {
+  validate: (schema, data) => {
+    try {
+      return isKnownUpdateCredential(data)
+    } catch (e) {
+      return false
+    }
+  },
+  errors: true,
+})
+
 const addressType = { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$', isAddress: true }
 const whitelistAddressType = { ...addressType, isTradingWalletWhitelisted: true }
+const knownUpdateCredentialType = { ...addressType, isKnownUpdateCredential: true }
 const signatureType = { type: 'string', pattern: '^0x[a-fA-F0-9]{100,200}$' }
 const dataType = { type: 'string', pattern: '^0x[a-fA-F0-9]{2000,2100}$' }
 const numberType = { type: "number" }
@@ -39,7 +51,7 @@ const zkCredentialUpdateSchema = {
       type: 'array',
       maxItems: 6,
       minItems: 6,
-      items: [whitelistAddressType, addressType, numberType, numberType, numberType, dataType],
+      items: [whitelistAddressType, knownUpdateCredentialType, numberType, numberType, numberType, dataType],
     },
     signature: signatureType,
   },
@@ -47,8 +59,6 @@ const zkCredentialUpdateSchema = {
 }
 
 const validateZkCredentialUpdate = ajv.compile(zkCredentialUpdateSchema)
-// const validateMiningReward = ajv.compile(miningRewardSchema)
-// const validateMiningWithdraw = ajv.compile(miningWithdrawSchema)
 
 function getInputError(validator, data) {
   validator(data)

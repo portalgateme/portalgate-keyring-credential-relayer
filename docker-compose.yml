@@ -48,7 +48,7 @@ services:
 
   eth-server:
     build: .
-    image: local/portalgate/zk-relayer/4.14
+    image: local/portalgate/zk-relayer
     profiles: [ 'eth' ]
     restart: always
     command: server
@@ -60,7 +60,7 @@ services:
     depends_on: [ redis ]
 
   eth-healthWatcher:
-    image: local/portalgate/zk-relayer/4.14
+    image: local/portalgate/zk-relayer
     profiles: [ 'eth' ]
     restart: always
     command: healthWatcher
@@ -71,7 +71,7 @@ services:
     depends_on: [ redis, eth-server ]
 
   eth-worker1:
-    image: local/portalgate/zk-relayer/4.14
+    image: local/portalgate/zk-relayer
     profiles: [ 'eth' ]
     restart: always
     command: worker
@@ -85,7 +85,7 @@ services:
 
   geth-server:
     build: .
-    image: local/portalgate/zk-relayer/4.14
+    image: local/portalgate/zk-relayer
     profiles: [ 'geth' ]
     restart: always
     command: server
@@ -97,7 +97,7 @@ services:
     depends_on: [ redis ]
 
   geth-healthWatcher:
-    image: local/portalgate/zk-relayer/4.14
+    image: local/portalgate/zk-relayer
     profiles: [ 'geth' ]
     restart: always
     command: healthWatcher
@@ -108,7 +108,7 @@ services:
     depends_on: [ redis, geth-server ]
 
   geth-worker1:
-    image: local/portalgate/zk-relayer/4.14
+    image: local/portalgate/zk-relayer
     profiles: [ 'geth' ]
     restart: always
     command: worker

@@ -1,8 +1,12 @@
-const { whitelistAddresses } = require('./config')
+const { whitelistAddresses, updateCredentialAddress } = require('./config')
 const { toBN, toChecksumAddress, BN, fromWei, isAddress, toWei } = require('web3-utils')
 
 const isTradingWalletWhitelisted = (address) => {
   return whitelistAddresses.includes(address)
+}
+
+const isKnownUpdateCredential = (address) => {
+  return toChecksumAddress(address) === toChecksumAddress(updateCredentialAddress)
 }
 
 function setSafeInterval(func, interval) {
@@ -44,5 +48,6 @@ module.exports = {
   RelayerError,
   logRelayerError,
   readRelayerErrors,
-  isTradingWalletWhitelisted
+  isTradingWalletWhitelisted,
+  isKnownUpdateCredential
 }
