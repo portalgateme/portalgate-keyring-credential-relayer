@@ -22,5 +22,7 @@ router.get('/', status.index)
 router.get('/status', status.status)
 router.get('/jobs/:id', status.getJob)
 router.post('/updateZkCredential', controller.updateZkCredential)
+router.get('/isWhitelisted/:address', status.checkWalletAddress)
+
 
 module.exports = router

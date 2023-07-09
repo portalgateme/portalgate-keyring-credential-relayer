@@ -2,7 +2,7 @@ const queue = require('../queue')
 const { netId, trustedForwarderAddress, networkName } = require('../config')
 const { version } = require('../../package.json')
 const { redis } = require('../modules/redis')
-const { readRelayerErrors } = require('../utils')
+const { readRelayerErrors, isTradingWalletWhitelisted } = require('../utils')
 
 async function status(req, res) {
   const health = await redis.hgetall('health')
@@ -30,8 +30,15 @@ async function getJob(req, res) {
   return status ? res.json(status) : res.status(400).json({ error: "The job doesn't exist" })
 }
 
+function checkWalletAddress(req, res) {
+  const address = req.params.address
+  const isAddressWhitelisted = isTradingWalletWhitelisted(address)
+  return res.json(isAddressWhitelisted)
+}
+
 module.exports = {
   status,
   index,
-  getJob
+  getJob,
+  checkWalletAddress
 }

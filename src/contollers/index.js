@@ -1,4 +1,4 @@
 module.exports = {
   controller: require('./controller'),
-  status: require('./status'),
+  status: require('./status')
 }
