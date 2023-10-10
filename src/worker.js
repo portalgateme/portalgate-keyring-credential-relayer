@@ -8,7 +8,7 @@ const {
 } = require('./utils')
 const { jobType, status } = require('./constants')
 const {
-  gasLimits,
+  gasLimit,
   privateKey,
   httpRpcUrl,
   baseFeeReserve,
@@ -57,7 +57,7 @@ async function getTxObject({ data }) {
     return {
       to: trustedForwarderAddress,
       data: encodeFunctionData,
-      gasLimit: gasLimits['ZK_CREDENTIAL_UPDATE'],
+      gasLimit,
     }
   }
 }
